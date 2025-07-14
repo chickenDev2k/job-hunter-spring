@@ -2,6 +2,8 @@ package jp.quangit.rest_api.service;
 
 import jp.quangit.rest_api.domain.User;
 import jp.quangit.rest_api.repository.UserRepository;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +11,11 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> fetchAllUser() {
@@ -22,6 +26,8 @@ public class UserService {
     }
 
     public User handleSaveUser(User user){
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
        return  this.userRepository.save(user);
 
     }
