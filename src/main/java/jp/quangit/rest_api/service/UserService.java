@@ -13,7 +13,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -21,19 +21,24 @@ public class UserService {
     public List<User> fetchAllUser() {
         return this.userRepository.findAll();
     }
-    public User fetchUserById(long id){
+
+    public User fetchUserById(long id) {
         return this.userRepository.findById(id);
     }
 
-    public User handleSaveUser(User user){
+    public User handleGetUserByUsername(String userName) {
+        return this.userRepository.findByEmail(userName);
+    }
+
+    public User handleSaveUser(User user) {
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
-       return  this.userRepository.save(user);
+        return this.userRepository.save(user);
 
     }
+
     public void handleDeleteUser(long id) {
         this.userRepository.deleteById(id);
     }
-
 
 }

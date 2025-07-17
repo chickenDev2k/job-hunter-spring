@@ -3,7 +3,8 @@ package jp.quangit.rest_api.controller;
 import jp.quangit.rest_api.domain.User;
 import jp.quangit.rest_api.repository.UserRepository;
 import jp.quangit.rest_api.service.UserService;
-import jp.quangit.rest_api.service.error.IdInvalidException;
+import jp.quangit.rest_api.utils.error.IdInvalidException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
