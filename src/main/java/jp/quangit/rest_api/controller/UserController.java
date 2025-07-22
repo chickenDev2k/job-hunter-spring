@@ -22,11 +22,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/")
-    public String getMethodName() {
-        return "hello anh em nha ";
-    }
-
     // get all users
     @GetMapping("/api/users")
     public ResponseEntity<List<User>> fetchAllUser() {
