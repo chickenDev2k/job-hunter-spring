@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import jp.quangit.rest_api.domain.User;
 import jp.quangit.rest_api.domain.dto.LoginDTO;
 import jp.quangit.rest_api.domain.dto.ResLoginDTO;
+import jp.quangit.rest_api.domain.dto.User;
 import jp.quangit.rest_api.utils.SecurityUtil;
 
 @RestController

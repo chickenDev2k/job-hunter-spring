@@ -1,6 +1,6 @@
 package jp.quangit.rest_api.service;
 
-import jp.quangit.rest_api.domain.User;
+import jp.quangit.rest_api.domain.dto.User;
 import jp.quangit.rest_api.repository.UserRepository;
 
 import org.springframework.security.crypto.password.PasswordEncoder;

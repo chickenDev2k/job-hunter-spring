@@ -1,7 +1,6 @@
-package jp.quangit.rest_api.domain;
+package jp.quangit.rest_api.domain.dto;
 
 import jakarta.persistence.*;
-
 
 //can use lambook to generate getter setter like data class in kotlin
 
