@@ -1,71 +1,126 @@
 package jp.quangit.rest_api.controller;
 
+import jp.quangit.rest_api.domain.RestResponse;
+import jp.quangit.rest_api.domain.dto.ResultPaginationDTO;
 import jp.quangit.rest_api.domain.dto.User;
+import jp.quangit.rest_api.domain.dto.UserCreatedDTO;
+import jp.quangit.rest_api.domain.dto.UserDTO;
+import jp.quangit.rest_api.domain.dto.UserUpdatedDTO;
 import jp.quangit.rest_api.repository.UserRepository;
 import jp.quangit.rest_api.service.UserService;
+import jp.quangit.rest_api.utils.ConvertWithDTO;
+import jp.quangit.rest_api.utils.annotation.ApiMessage;
 import jp.quangit.rest_api.utils.error.IdInvalidException;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import java.util.Optional;
+
+import com.turkraft.springfilter.boot.Filter;
 
 @RestController
+@RequestMapping("/api/v1")
 public class UserController {
     private final UserService userService;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     // get all users
-    @GetMapping("/api/users")
-    public ResponseEntity<List<User>> fetchAllUser() {
-        List<User> users = new ArrayList<>();
-        users = this.userService.fetchAllUser() != null ? this.userService.fetchAllUser() : users;
-        return ResponseEntity.status(HttpStatus.OK).body(users);
+    // with filter and pagination
+    @GetMapping("/users")
+    @ApiMessage("fetch all user")
+    public ResponseEntity<ResultPaginationDTO> fetchAllUser(
+            @Filter Specification<User> spec,
+            Pageable pageable)
+
+    {
+
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.fetchAllUser(spec, pageable));
     }
 
     // get user by id
-    @GetMapping("/api/users/{id}")
-    public ResponseEntity<User> fetchUserById(@PathVariable("id") long id) {
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> fetchUserById(@PathVariable("id") long id) {
+        RestResponse rs = new RestResponse<>();
+        UserDTO resUser = new UserDTO();
         User user = this.userService.fetchUserById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        if (user != null) {
+            resUser = ConvertWithDTO.convertToUserDTO(user);
+        } else {
+            rs.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            rs.setError("Bad request");
+            rs.setMessage("ユーザーが見つかりませんでした");
+        }
+        return user != null ? ResponseEntity.status(HttpStatus.OK).body(resUser) : ResponseEntity.badRequest().body(rs);
     }
 
     // create new user
-    @PostMapping("/api/users/create")
-    public ResponseEntity<User> createNewUser1(@RequestBody User user) {
+    @PostMapping("/users/create")
+
+    public ResponseEntity<?> createNewUser(@RequestBody User user) {
+        RestResponse rs = new RestResponse<User>();
+        UserCreatedDTO userResDTO = new UserCreatedDTO();
         User newUser = this.userService.handleSaveUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        if (newUser != null) {
+            userResDTO = ConvertWithDTO.convertToUserCreatedDTO(newUser);
+            rs.setData(userResDTO);
+        } else {
+            rs.setError("bad request");
+            rs.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            rs.setMessage("tai khoan da ton tai !!!");
+        }
+
+        return newUser != null ? ResponseEntity.status(HttpStatus.CREATED).body(userResDTO)
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(rs);
     }
 
     // update user
-    @PutMapping("/api/users")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    @PutMapping("/users")
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        RestResponse rs = new RestResponse<>();
+        UserUpdatedDTO userUpdatedDTO = new UserUpdatedDTO();
         User existUser = this.userService.fetchUserById(user.getId());
         if (existUser != null) {
             existUser.setName(user.getName());
-            existUser.setEmail(user.getEmail());
-            existUser.setPassword(user.getPassword());
+            existUser.setAddress(user.getAddress());
+            existUser.setGender(user.getGender());
+            existUser.setAge(user.getAge());
+            existUser.setUpdatedAt(Instant.now());
+            userUpdatedDTO = ConvertWithDTO.convertToUserUpdatedDTO(existUser);
+            this.userService.handleSaveUser(existUser);
+        } else {
+            rs.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            rs.setError("Bad request");
+            rs.setMessage("ユーザーが見つかりませんでした");
         }
-        this.userService.handleSaveUser(existUser);
-        return ResponseEntity.ok(existUser);
+        return existUser != null ? ResponseEntity.ok(userUpdatedDTO) : ResponseEntity.badRequest().body(rs);
     }
 
     // delete user by id
-    @DeleteMapping("/api/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") long id)
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") long id)
             throws IdInvalidException {
-        if (id >= 1000) {
-            throw new IdInvalidException("id lon the");
+        RestResponse rs = new RestResponse<>();
+        boolean checkExit = this.userRepository.existsById(id);
+        if (checkExit) {
+            this.userService.handleDeleteUser(id);
+        } else {
+            rs.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            rs.setMessage("tai khoan nay khong ton tai");
         }
-        this.userService.handleDeleteUser(id);
-        // return ResponseEntity.status(HttpStatus.OK).body("deleted!");
-        return ResponseEntity.ok("deleted");
+
+        return checkExit ? ResponseEntity.ok().body(null) : ResponseEntity.badRequest().body(rs);
     }
 }

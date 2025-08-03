@@ -21,7 +21,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 public class GlobalException {
     @ExceptionHandler(value = {
             UsernameNotFoundException.class,
-            BadCredentialsException.class
+            BadCredentialsException.class,
+
     })
     public ResponseEntity<RestResponse<Object>> handleIdException(Exception ex) {
         RestResponse<Object> res = new RestResponse<Object>();
@@ -55,6 +56,16 @@ public class GlobalException {
         res.setMessage(errors.size() > 1 ? errors : errors.get(0));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<RestResponse<Object>> invalidFilter(IllegalStateException ex) {
+        RestResponse<Object> rs = new RestResponse<>();
+        rs.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        rs.setError(ex.getMessage());
+        rs.setMessage("khong tim thay tu thong tin ban truyen len !");
+        return ResponseEntity.badRequest().body(rs);
+
     }
 
 }
