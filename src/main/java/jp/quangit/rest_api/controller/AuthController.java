@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jp.quangit.rest_api.domain.User;
 import jp.quangit.rest_api.domain.dto.LoginDTO;
 import jp.quangit.rest_api.domain.dto.ResLoginDTO;
-import jp.quangit.rest_api.domain.dto.User;
+import jp.quangit.rest_api.service.UserService;
 import jp.quangit.rest_api.utils.SecurityUtil;
 
 @RestController
@@ -22,10 +23,13 @@ public class AuthController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final SecurityUtil securityUtil;
+    private final UserService userService;
 
-    public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil securityUtil) {
+    public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil securityUtil,
+            UserService userService) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.securityUtil = securityUtil;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -43,6 +47,13 @@ public class AuthController {
         String accessToken = this.securityUtil.createToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         ResLoginDTO res = new ResLoginDTO();
+        User currentUserDB = userService.handleGetUserByUsername(loginDTO.getUserName());
+        if (currentUserDB != null) {
+            ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(currentUserDB.getId(), currentUserDB.getEmail(),
+                    currentUserDB.getName());
+            res.setUserLogin(userLogin);
+        }
+
         res.setAccessToken(accessToken);
         return ResponseEntity.ok().body(res);
     }

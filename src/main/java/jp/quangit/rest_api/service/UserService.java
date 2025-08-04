@@ -1,11 +1,12 @@
 package jp.quangit.rest_api.service;
 
-import jp.quangit.rest_api.domain.dto.Meta;
+import jp.quangit.rest_api.domain.Meta;
+import jp.quangit.rest_api.domain.User;
 import jp.quangit.rest_api.domain.dto.ResultPaginationDTO;
-import jp.quangit.rest_api.domain.dto.User;
 import jp.quangit.rest_api.domain.dto.UserDTO;
 import jp.quangit.rest_api.repository.UserRepository;
 import jp.quangit.rest_api.utils.ConvertWithDTO;
+import jp.quangit.rest_api.utils.error.IdInvalidException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -29,7 +32,7 @@ public class UserService {
 
     public ResultPaginationDTO fetchAllUser(Specification<User> specification, Pageable pageable) {
         Page<User> pageUser = this.userRepository.findAll(specification, pageable);
-        List<UserDTO> pageUserRes = new ArrayList<>();
+
         ResultPaginationDTO rs = new ResultPaginationDTO();
         Meta mt = new Meta();
         mt.setPage(pageable.getPageNumber() + 1);
@@ -39,9 +42,12 @@ public class UserService {
 
         rs.setMeta(mt);
         // edit response without password
-        for (User user : pageUser) {
-            pageUserRes.add(ConvertWithDTO.convertToUserDTO(user));
-        }
+        List<UserDTO> pageUserRes = pageUser.getContent().stream().map((item) -> ConvertWithDTO.convertToUserDTO(item))
+                .collect(Collectors.toList());
+
+        // for (User user : pageUser) {
+        // pageUserRes.add(ConvertWithDTO.convertToUserDTO(user));
+        // }
         rs.setResult(pageUserRes);
 
         return rs;
@@ -55,9 +61,9 @@ public class UserService {
         return this.userRepository.findByEmail(userName);
     }
 
-    public User handleSaveUser(User user) {
+    public User handleSaveUser(User user) throws IdInvalidException {
         if (this.userRepository.existsByEmail(user.getEmail())) {
-            return null;
+            throw new IdInvalidException("Email" + user.getEmail() + "da ton tai , vui long su dung email khac");
         }
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);

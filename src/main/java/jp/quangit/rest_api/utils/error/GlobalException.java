@@ -1,6 +1,7 @@
 package jp.quangit.rest_api.utils.error;
 
 import jp.quangit.rest_api.domain.RestResponse;
+import jp.quangit.rest_api.domain.User;
 
 import java.util.List;
 import java.util.stream.Collector;
@@ -22,6 +23,7 @@ public class GlobalException {
     @ExceptionHandler(value = {
             UsernameNotFoundException.class,
             BadCredentialsException.class,
+            IdInvalidException.class,
 
     })
     public ResponseEntity<RestResponse<Object>> handleIdException(Exception ex) {

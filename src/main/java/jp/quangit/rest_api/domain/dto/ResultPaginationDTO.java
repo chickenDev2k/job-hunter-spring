@@ -1,5 +1,6 @@
 package jp.quangit.rest_api.domain.dto;
 
+import jp.quangit.rest_api.domain.Meta;
 import lombok.Getter;
 import lombok.Setter;
 

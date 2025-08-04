@@ -1,4 +1,4 @@
-package jp.quangit.rest_api.domain.dto;
+package jp.quangit.rest_api.domain;
 
 import java.time.Instant;
 

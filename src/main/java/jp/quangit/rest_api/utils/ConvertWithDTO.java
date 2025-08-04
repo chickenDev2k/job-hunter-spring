@@ -1,8 +1,8 @@
 package jp.quangit.rest_api.utils;
 
-import jp.quangit.rest_api.domain.dto.Company;
+import jp.quangit.rest_api.domain.Company;
+import jp.quangit.rest_api.domain.User;
 import jp.quangit.rest_api.domain.dto.CompanyDTO;
-import jp.quangit.rest_api.domain.dto.User;
 import jp.quangit.rest_api.domain.dto.UserCreatedDTO;
 import jp.quangit.rest_api.domain.dto.UserDTO;
 import jp.quangit.rest_api.domain.dto.UserUpdatedDTO;

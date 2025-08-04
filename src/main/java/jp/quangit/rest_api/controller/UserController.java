@@ -1,8 +1,8 @@
 package jp.quangit.rest_api.controller;
 
 import jp.quangit.rest_api.domain.RestResponse;
+import jp.quangit.rest_api.domain.User;
 import jp.quangit.rest_api.domain.dto.ResultPaginationDTO;
-import jp.quangit.rest_api.domain.dto.User;
 import jp.quangit.rest_api.domain.dto.UserCreatedDTO;
 import jp.quangit.rest_api.domain.dto.UserDTO;
 import jp.quangit.rest_api.domain.dto.UserUpdatedDTO;
@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.turkraft.springfilter.boot.Filter;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -69,7 +71,7 @@ public class UserController {
     // create new user
     @PostMapping("/users/create")
 
-    public ResponseEntity<?> createNewUser(@RequestBody User user) {
+    public ResponseEntity<?> createNewUser(@Valid @RequestBody User user) throws IdInvalidException {
         RestResponse rs = new RestResponse<User>();
         UserCreatedDTO userResDTO = new UserCreatedDTO();
         User newUser = this.userService.handleSaveUser(user);
@@ -88,7 +90,7 @@ public class UserController {
 
     // update user
     @PutMapping("/users")
-    public ResponseEntity<?> updateUser(@RequestBody User user) {
+    public ResponseEntity<?> updateUser(@RequestBody User user) throws IdInvalidException {
         RestResponse rs = new RestResponse<>();
         UserUpdatedDTO userUpdatedDTO = new UserUpdatedDTO();
         User existUser = this.userService.fetchUserById(user.getId());

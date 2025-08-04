@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import jp.quangit.rest_api.domain.dto.User;
+import jp.quangit.rest_api.domain.User;
 
 @Component("userDetailsService")
 public class UserDetailsCustom implements UserDetailsService {

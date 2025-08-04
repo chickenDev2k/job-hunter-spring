@@ -4,7 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import jp.quangit.rest_api.domain.dto.Company;
+import jp.quangit.rest_api.domain.Company;
+
 import java.util.List;
 
 @Repository

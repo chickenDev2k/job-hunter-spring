@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import jp.quangit.rest_api.domain.dto.Company;
-import jp.quangit.rest_api.domain.dto.Meta;
+import jp.quangit.rest_api.domain.Company;
+import jp.quangit.rest_api.domain.Meta;
 import jp.quangit.rest_api.domain.dto.ResultPaginationDTO;
 import jp.quangit.rest_api.repository.CompanyRepository;
 

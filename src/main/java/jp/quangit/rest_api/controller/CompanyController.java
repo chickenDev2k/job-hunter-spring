@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
+import jp.quangit.rest_api.domain.Company;
 import jp.quangit.rest_api.domain.RestResponse;
-import jp.quangit.rest_api.domain.dto.Company;
 import jp.quangit.rest_api.domain.dto.CompanyDTO;
 import jp.quangit.rest_api.domain.dto.ResultPaginationDTO;
 import jp.quangit.rest_api.service.CompanyService;

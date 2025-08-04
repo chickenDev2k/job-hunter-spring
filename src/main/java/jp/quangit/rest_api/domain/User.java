@@ -1,8 +1,9 @@
-package jp.quangit.rest_api.domain.dto;
+package jp.quangit.rest_api.domain;
 
 import java.time.Instant;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jp.quangit.rest_api.utils.constant.GenderEnum;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    @NotBlank(message = "email khong duoc de trong ")
     private String email;
     private String password;
     private int age;
