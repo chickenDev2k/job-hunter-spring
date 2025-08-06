@@ -77,4 +77,11 @@ public class UserService {
         this.userRepository.deleteById(id);
     }
 
+    public void updateUserToken(String token, String email) {
+        User currentUser = this.handleGetUserByUsername(email);
+        if (currentUser != null) {
+            currentUser.setRefreshToken(token);
+            this.userRepository.save(currentUser);
+        }
+    }
 }

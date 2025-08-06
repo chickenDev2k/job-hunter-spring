@@ -33,7 +33,7 @@ public class SecurityConfiguration {
     @Value("${quangit.jwt.base64-secret}")
     private String jwtKey;
 
-    @Value("${quangit.jwt.token-validity-in-seconds}")
+    @Value("${quangit.jwt.access-token-validity-in-seconds}")
     private String jwtExpiration;
 
     @Bean

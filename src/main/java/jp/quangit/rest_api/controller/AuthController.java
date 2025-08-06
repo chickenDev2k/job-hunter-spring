@@ -1,5 +1,8 @@
 package jp.quangit.rest_api.controller;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -24,6 +27,8 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final SecurityUtil securityUtil;
     private final UserService userService;
+    @Value("${quangit.jwt.refresh-token-validity-in-seconds}")
+    private long refreshTokenExpiration;
 
     public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil securityUtil,
             UserService userService) {
@@ -44,7 +49,7 @@ public class AuthController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // create token
-        String accessToken = this.securityUtil.createToken(authentication);
+        String accessToken = this.securityUtil.createAccessToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         ResLoginDTO res = new ResLoginDTO();
         User currentUserDB = userService.handleGetUserByUsername(loginDTO.getUserName());
@@ -55,7 +60,23 @@ public class AuthController {
         }
 
         res.setAccessToken(accessToken);
-        return ResponseEntity.ok().body(res);
+        // create refresh token
+        String refresh_token = this.securityUtil.createRefreshToken(loginDTO.getUserName(), res);
+
+        // update user
+        this.userService.updateUserToken(refresh_token, loginDTO.getUserName());
+
+        // set cookies
+        ResponseCookie responseCookie = ResponseCookie
+                .from("refresh_token", refresh_token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(refreshTokenExpiration)
+                .build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .body(res);
     }
 
 }
