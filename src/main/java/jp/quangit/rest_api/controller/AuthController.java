@@ -19,6 +19,10 @@ import jp.quangit.rest_api.domain.dto.LoginDTO;
 import jp.quangit.rest_api.domain.dto.ResLoginDTO;
 import jp.quangit.rest_api.service.UserService;
 import jp.quangit.rest_api.utils.SecurityUtil;
+import jp.quangit.rest_api.utils.annotation.ApiMessage;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -37,7 +41,22 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
+    @GetMapping("/auth/account")
+    @ApiMessage("Fetch account ")
+    public ResponseEntity<ResLoginDTO.UserLogin> getAccount() {
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+        User currentUserDB = userService.handleGetUserByUsername(email);
+        ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin();
+        if (currentUserDB != null) {
+            userLogin.setId(currentUserDB.getId());
+            userLogin.setName(currentUserDB.getEmail());
+            userLogin.setEmail(currentUserDB.getName());
+
+        }
+        return ResponseEntity.ok().body(userLogin);
+    }
+
+    @PostMapping("/auth/login")
     public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
 
         // nap input vao security
@@ -49,7 +68,7 @@ public class AuthController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // create token
-        String accessToken = this.securityUtil.createAccessToken(authentication);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         ResLoginDTO res = new ResLoginDTO();
         User currentUserDB = userService.handleGetUserByUsername(loginDTO.getUserName());
@@ -58,6 +77,7 @@ public class AuthController {
                     currentUserDB.getName());
             res.setUserLogin(userLogin);
         }
+        String accessToken = this.securityUtil.createAccessToken(authentication, res.getUserLogin());
 
         res.setAccessToken(accessToken);
         // create refresh token
