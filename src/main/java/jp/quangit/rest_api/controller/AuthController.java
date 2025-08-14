@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import jp.quangit.rest_api.service.UserService;
 import jp.quangit.rest_api.utils.SecurityUtil;
 import jp.quangit.rest_api.utils.annotation.ApiMessage;
 
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -41,6 +43,7 @@ public class AuthController {
         this.userService = userService;
     }
 
+    // get current account
     @GetMapping("/auth/account")
     @ApiMessage("Fetch account ")
     public ResponseEntity<ResLoginDTO.UserLogin> getAccount() {
@@ -69,6 +72,7 @@ public class AuthController {
 
         // create token
 
+        // set infor login user to context
         SecurityContextHolder.getContext().setAuthentication(authentication);
         ResLoginDTO res = new ResLoginDTO();
         User currentUserDB = userService.handleGetUserByUsername(loginDTO.getUserName());
@@ -94,9 +98,20 @@ public class AuthController {
                 .path("/")
                 .maxAge(refreshTokenExpiration)
                 .build();
+
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
                 .body(res);
+    }
+
+    @GetMapping("/auth/refresh")
+    @ApiMessage("get user by refresh token")
+    public ResponseEntity<String> getRefreshToken(
+            @CookieValue(name = "refresh_token") String refresh_token) {
+        // check valid
+        Jwt decodedToken = this.securityUtil.checkValidRefreshToken(refresh_token);
+        String email = decodedToken.getSubject();
+        return ResponseEntity.ok().body(email);
     }
 
 }
