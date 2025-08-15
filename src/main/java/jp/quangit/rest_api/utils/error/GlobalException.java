@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 
 @RestControllerAdvice
 public class GlobalException {
@@ -24,6 +25,7 @@ public class GlobalException {
             UsernameNotFoundException.class,
             BadCredentialsException.class,
             IdInvalidException.class,
+            MissingRequestCookieException.class
 
     })
     public ResponseEntity<RestResponse<Object>> handleIdException(Exception ex) {
@@ -69,5 +71,16 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(rs);
 
     }
+
+    // @ExceptionHandler(MissingRequestCookieException.class)
+    // public ResponseEntity<RestResponse<Object>>
+    // invalidToken(IllegalStateException ex) {
+    // RestResponse<Object> rs = new RestResponse<>();
+    // rs.setStatusCode(HttpStatus.BAD_REQUEST.value());
+    // rs.setError(ex.getMessage());
+    // rs.setMessage("chua dang nhap !");
+    // return ResponseEntity.badRequest().body(rs);
+
+    // }
 
 }
