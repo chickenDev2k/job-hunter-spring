@@ -1,8 +1,8 @@
 package jp.quangit.rest_api.service;
 
 import jp.quangit.rest_api.domain.User;
-import jp.quangit.rest_api.domain.dto.ResultPaginationDTO;
-import jp.quangit.rest_api.domain.dto.UserDTO;
+import jp.quangit.rest_api.domain.response.ResultPaginationDTO;
+import jp.quangit.rest_api.domain.response.UserDTO;
 import jp.quangit.rest_api.repository.UserRepository;
 import jp.quangit.rest_api.utils.ConvertWithDTO;
 import jp.quangit.rest_api.utils.error.IdInvalidException;

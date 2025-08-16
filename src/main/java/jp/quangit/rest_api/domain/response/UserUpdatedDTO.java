@@ -1,4 +1,4 @@
-package jp.quangit.rest_api.domain.dto;
+package jp.quangit.rest_api.domain.response;
 
 import java.time.Instant;
 
@@ -8,13 +8,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserCreatedDTO {
+public class UserUpdatedDTO {
     private long id;
     private String name;
-    private String email;
     private GenderEnum gender;
     private String address;
     private int age;
-    private Instant createdAt;
-
+    private Instant updatedAt;
 }

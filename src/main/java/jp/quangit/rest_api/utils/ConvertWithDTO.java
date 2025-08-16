@@ -2,10 +2,10 @@ package jp.quangit.rest_api.utils;
 
 import jp.quangit.rest_api.domain.Company;
 import jp.quangit.rest_api.domain.User;
-import jp.quangit.rest_api.domain.dto.CompanyDTO;
-import jp.quangit.rest_api.domain.dto.UserCreatedDTO;
-import jp.quangit.rest_api.domain.dto.UserDTO;
-import jp.quangit.rest_api.domain.dto.UserUpdatedDTO;
+import jp.quangit.rest_api.domain.response.CompanyDTO;
+import jp.quangit.rest_api.domain.response.UserCreatedDTO;
+import jp.quangit.rest_api.domain.response.UserDTO;
+import jp.quangit.rest_api.domain.response.UserUpdatedDTO;
 
 public class ConvertWithDTO {
     public static Company convertToCompanyObj(CompanyDTO companyDTO) {

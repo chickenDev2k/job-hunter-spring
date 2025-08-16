@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import jp.quangit.rest_api.domain.Company;
-import jp.quangit.rest_api.domain.dto.ResultPaginationDTO;
+import jp.quangit.rest_api.domain.response.ResultPaginationDTO;
 import jp.quangit.rest_api.repository.CompanyRepository;
 
 @Service

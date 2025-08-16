@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import jp.quangit.rest_api.domain.User;
-import jp.quangit.rest_api.domain.dto.RequestLoginDTO;
-import jp.quangit.rest_api.domain.dto.ResLoginDTO;
+import jp.quangit.rest_api.domain.request.RequestLoginDTO;
+import jp.quangit.rest_api.domain.response.ResLoginDTO;
 import jp.quangit.rest_api.service.UserService;
 import jp.quangit.rest_api.utils.SecurityUtil;
 import jp.quangit.rest_api.utils.annotation.ApiMessage;

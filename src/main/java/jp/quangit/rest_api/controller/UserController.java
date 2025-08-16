@@ -2,10 +2,10 @@ package jp.quangit.rest_api.controller;
 
 import jp.quangit.rest_api.domain.RestResponse;
 import jp.quangit.rest_api.domain.User;
-import jp.quangit.rest_api.domain.dto.ResultPaginationDTO;
-import jp.quangit.rest_api.domain.dto.UserCreatedDTO;
-import jp.quangit.rest_api.domain.dto.UserDTO;
-import jp.quangit.rest_api.domain.dto.UserUpdatedDTO;
+import jp.quangit.rest_api.domain.response.ResultPaginationDTO;
+import jp.quangit.rest_api.domain.response.UserCreatedDTO;
+import jp.quangit.rest_api.domain.response.UserDTO;
+import jp.quangit.rest_api.domain.response.UserUpdatedDTO;
 import jp.quangit.rest_api.repository.UserRepository;
 import jp.quangit.rest_api.service.UserService;
 import jp.quangit.rest_api.utils.ConvertWithDTO;

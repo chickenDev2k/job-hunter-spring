@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 
 import com.nimbusds.jose.util.Base64;
 
-import jp.quangit.rest_api.domain.dto.ResLoginDTO;
+import jp.quangit.rest_api.domain.response.ResLoginDTO;
 
 @Service
 public class SecurityUtil {
