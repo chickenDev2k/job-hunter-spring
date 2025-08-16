@@ -7,8 +7,8 @@ import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
 import jp.quangit.rest_api.domain.Company;
-import jp.quangit.rest_api.domain.RestResponse;
 import jp.quangit.rest_api.domain.response.CompanyDTO;
+import jp.quangit.rest_api.domain.response.RestResponse;
 import jp.quangit.rest_api.domain.response.ResultPaginationDTO;
 import jp.quangit.rest_api.service.CompanyService;
 import jp.quangit.rest_api.utils.ConvertWithDTO;

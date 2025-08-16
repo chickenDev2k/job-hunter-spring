@@ -1,7 +1,7 @@
 package jp.quangit.rest_api.utils;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jp.quangit.rest_api.domain.RestResponse;
+import jp.quangit.rest_api.domain.response.RestResponse;
 import jp.quangit.rest_api.utils.annotation.ApiMessage;
 
 import org.springframework.core.MethodParameter;

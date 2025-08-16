@@ -1,7 +1,7 @@
 package jp.quangit.rest_api.utils.error;
 
-import jp.quangit.rest_api.domain.RestResponse;
 import jp.quangit.rest_api.domain.User;
+import jp.quangit.rest_api.domain.response.RestResponse;
 
 import java.util.List;
 import java.util.stream.Collector;

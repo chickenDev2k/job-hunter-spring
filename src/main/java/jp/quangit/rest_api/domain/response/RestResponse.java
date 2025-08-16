@@ -1,4 +1,4 @@
-package jp.quangit.rest_api.domain;
+package jp.quangit.rest_api.domain.response;
 
 public class RestResponse<T> {
     private int statusCode;
