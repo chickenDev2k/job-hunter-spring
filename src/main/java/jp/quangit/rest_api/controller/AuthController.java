@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import jp.quangit.rest_api.domain.User;
-import jp.quangit.rest_api.domain.dto.LoginDTO;
+import jp.quangit.rest_api.domain.dto.RequestLoginDTO;
 import jp.quangit.rest_api.domain.dto.ResLoginDTO;
 import jp.quangit.rest_api.service.UserService;
 import jp.quangit.rest_api.utils.SecurityUtil;
@@ -63,7 +63,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody RequestLoginDTO loginDTO) {
 
         // nap input vao security
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -79,6 +79,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         ResLoginDTO res = new ResLoginDTO();
         User currentUserDB = userService.handleGetUserByUsername(loginDTO.getUserName());
+
         if (currentUserDB != null) {
             ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(currentUserDB.getId(), currentUserDB.getEmail(),
                     currentUserDB.getName());

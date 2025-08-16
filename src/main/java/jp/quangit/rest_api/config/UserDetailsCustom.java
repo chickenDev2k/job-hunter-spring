@@ -1,4 +1,4 @@
-package jp.quangit.rest_api.service;
+package jp.quangit.rest_api.config;
 
 import java.util.Collections;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import jp.quangit.rest_api.domain.User;
+import jp.quangit.rest_api.service.UserService;
 
 @Component("userDetailsService")
 public class UserDetailsCustom implements UserDetailsService {

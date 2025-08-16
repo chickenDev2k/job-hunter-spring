@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import jp.quangit.rest_api.domain.Company;
-import jp.quangit.rest_api.domain.Meta;
 import jp.quangit.rest_api.domain.dto.ResultPaginationDTO;
 import jp.quangit.rest_api.repository.CompanyRepository;
 
@@ -45,7 +44,7 @@ public class CompanyService {
     public ResultPaginationDTO getAllCompany(Specification<Company> specification, Pageable pageable) {
         ResultPaginationDTO rs = new ResultPaginationDTO();
         Page<Company> page = this.companyRepository.findAll(specification, pageable);
-        Meta mt = new Meta();
+        ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
         mt.setPage(pageable.getPageNumber() + 1);
         mt.setPageSize(pageable.getPageSize());
         mt.setPages(page.getTotalPages());

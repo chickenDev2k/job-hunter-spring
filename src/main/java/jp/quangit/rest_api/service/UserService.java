@@ -1,6 +1,5 @@
 package jp.quangit.rest_api.service;
 
-import jp.quangit.rest_api.domain.Meta;
 import jp.quangit.rest_api.domain.User;
 import jp.quangit.rest_api.domain.dto.ResultPaginationDTO;
 import jp.quangit.rest_api.domain.dto.UserDTO;
@@ -11,6 +10,7 @@ import jp.quangit.rest_api.utils.error.IdInvalidException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +34,7 @@ public class UserService {
         Page<User> pageUser = this.userRepository.findAll(specification, pageable);
 
         ResultPaginationDTO rs = new ResultPaginationDTO();
-        Meta mt = new Meta();
+        ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
         mt.setPage(pageable.getPageNumber() + 1);
         mt.setPageSize(pageable.getPageSize());
         mt.setPages(pageUser.getTotalPages());
